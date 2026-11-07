@@ -83,7 +83,7 @@ fallback for clients without the module.
 
 ## Development
 
-Use Rust 1.88+, Node 24+, and the pnpm version pinned in `packageManager`.
+Use Rust 1.88+, Node 24.21+, and the pnpm version pinned in `packageManager`.
 `nix develop` supplies the Rust/Node tools, pnpm, resvg, and fonts.
 
 ```sh

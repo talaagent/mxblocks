@@ -60,3 +60,7 @@ live outside the repository and are passed through `MXBLOCKS_PRIVATE_PATTERNS`.
 Never commit their actual values or an unsanitized match report. Current-tree
 privacy checks do not remove material from Git history, PRs, tags, or artifacts.
 Review those separately before changing repository visibility.
+
+The Element build uses Nix esbuild 0.27.2; keep its npm version matched to
+the Nix binary. The newer npm 0.28 line cannot be combined with this Nix binary.
+Node type definitions track the supported Node 24 runtime.

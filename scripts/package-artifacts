@@ -37,7 +37,7 @@ metadata = {
     "schema": 1,
     "packages": versions,
     "element": {"entrypoint": "mxblocks-rich.js", "fonts": "fonts/", "moduleApi": "^2.2.0"},
-    "math": {"command": "mxblocks-math", "node": ">=24", "externalRequirements": ["resvg", "fonts"]},
+    "math": {"command": "mxblocks-math", "node": json.loads((root / "packages/mxblocks-math/package.json").read_text())["engines"]["node"], "externalRequirements": ["resvg", "fonts"]},
     "files": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in artifacts},
 }
 manifest = out / "manifest.json"
