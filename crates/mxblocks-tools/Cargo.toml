@@ -1,0 +1,19 @@
+[package]
+name = "mxblocks-tools"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "rich_send / rich_edit tool definitions and argument checks for LLM agents posting mxblocks messages"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+documentation = "https://docs.rs/mxblocks-tools"
+keywords = ["matrix", "llm", "tools", "chatbot"]
+categories = ["api-bindings"]
+
+[dependencies]
+mxblocks.workspace = true
+serde_json.workspace = true
+
+[package.metadata.docs.rs]
+all-features = true

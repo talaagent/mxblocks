@@ -1,0 +1,47 @@
+{
+  "name": "@talaagent/mxblocks-element",
+  "version": "0.1.0",
+  "description": "Element Web runtime module rendering mxblocks rich message blocks",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talaagent/mxblocks.git",
+    "directory": "packages/mxblocks-element"
+  },
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test 'test/*.test.ts'",
+    "build": "esbuild src/index.tsx --bundle --format=esm --target=es2022 --minify --sourcemap --jsx=transform --jsx-factory=React.createElement --jsx-fragment=React.Fragment --loader:.css=text --outfile=dist/mxblocks-rich.js && mkdir -p dist/fonts && cp node_modules/katex/dist/fonts/*.woff2 dist/fonts/"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.1.0",
+    "katex": "^0.18.10",
+    "typescript": "^5.9.0",
+    "esbuild": "0.27.2"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "config.example.json"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "exports": {
+    ".": "./dist/mxblocks-rich.js",
+    "./assets/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "homepage": "https://github.com/talaagent/mxblocks/tree/main/packages/mxblocks-element#readme",
+  "bugs": {
+    "url": "https://github.com/talaagent/mxblocks/issues"
+  }
+}

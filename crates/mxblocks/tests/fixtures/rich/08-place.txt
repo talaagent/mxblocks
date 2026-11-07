@@ -1,0 +1,3 @@
+place demo. two spots:
+Soba Shop, 1 Main Street, Example City: https://www.openstreetmap.org/search?query=1%20Main%20Street%2C%20Example%20City
+Saturday Market, Central Park, Example City: https://www.openstreetmap.org/search?query=Central%20Park%2C%20Example%20City

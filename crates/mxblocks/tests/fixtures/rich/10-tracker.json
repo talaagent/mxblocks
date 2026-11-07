@@ -1,0 +1,54 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "tracker",
+   "title": "Kitchen Five",
+   "provider": "Example Delivery",
+   "kind": "food",
+   "status": "picking up",
+   "state": "live",
+   "eta": "2026-10-15T21:50:00Z",
+   "stages": [
+    {
+     "id": "placed",
+     "label": "Order placed",
+     "status": "done",
+     "at": "2026-10-15T21:10:00Z"
+    },
+    {
+     "id": "pickup",
+     "label": "Picking up",
+     "status": "running"
+    },
+    {
+     "id": "deliver",
+     "label": "On the way",
+     "status": "pending"
+    },
+    {
+     "id": "arrived",
+     "label": "Delivered",
+     "status": "pending"
+    }
+   ],
+   "driver": {
+    "name": "Alex",
+    "vehicle": "Bicycle",
+    "plate": "TEST 1",
+    "rating": "5.0"
+   },
+   "items": [
+    "veggie curry",
+    "rice"
+   ],
+   "total": {
+    "amount": 12,
+    "currency": "EUR"
+   },
+   "link": "https://delivery.example.org/",
+   "updated_at": "2026-10-15T21:31:00Z",
+   "fallback": "🛵 kitchen five · picking up · ETA 21:50"
+  }
+ ]
+}

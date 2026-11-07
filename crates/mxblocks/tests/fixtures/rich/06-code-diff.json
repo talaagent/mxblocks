@@ -1,0 +1,16 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "code",
+   "language": "rust",
+   "filename": "src/main.rs",
+   "code": "use bpaf::Bpaf;\n\n#[derive(Debug, Clone, Bpaf)]\n#[bpaf(options, version)]\n/// send a message as a bot\nstruct Say {\n    /// seconds to wait for the reply\n    #[bpaf(argument(\"TIMEOUT\"), fallback(30))]\n    timeout: u64,\n    /// the bot to send as\n    #[bpaf(positional(\"NAME\"))]\n    name: String,\n}\n\nfn main() {\n    let opts = say().run();\n    println!(\"{opts:?}\");\n}"
+  },
+  {
+   "type": "diff",
+   "filename": "src/say.rs",
+   "diff": "--- a/src/say.rs\n+++ b/src/say.rs\n@@ -6,6 +6,9 @@ struct Say {\n     #[bpaf(argument(\"TIMEOUT\"), fallback(30))]\n     timeout: u64,\n+    /// a full mxblocks payload: JSON, @FILE or -\n+    #[bpaf(argument(\"JSON\"), optional)]\n+    rich: Option<String>,\n     /// the bot to send as\n     #[bpaf(positional(\"NAME\"))]\n     name: String,"
+  }
+ ]
+}

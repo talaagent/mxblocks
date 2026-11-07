@@ -1,0 +1,4 @@
+card + cards demo. a sample order (invented data):
+Seed loaf, sliced, €4.20 (Bakery One, Jan 2). ordered 3x total.
+react 🍞 to say reorder or 👀 for similar.
+cafe two samples: Flat white (5x), Croissant (4x), Orange juice (2x)

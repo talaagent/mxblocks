@@ -1,0 +1,87 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "card",
+   "title": "Seed loaf",
+   "subtitle": "Sliced",
+   "price": "€4.20",
+   "store": "Bakery One",
+   "url": "https://shop.example.org/loaf",
+   "fields": [
+    {
+     "label": "Last ordered",
+     "value": "Jan 2, 9:00am"
+    },
+    {
+     "label": "Times ordered",
+     "value": "3"
+    }
+   ],
+   "actions": [
+    {
+     "id": "reorder",
+     "label": "Reorder",
+     "style": "primary",
+     "action": {
+      "type": "react",
+      "key": "🍞"
+     }
+    },
+    {
+     "id": "similar",
+     "label": "Similar",
+     "action": {
+      "type": "react",
+      "key": "👀"
+     }
+    }
+   ]
+  },
+  {
+   "type": "cards",
+   "cards": [
+    {
+     "title": "Flat white",
+     "subtitle": "Cafe Two",
+     "fields": [
+      {
+       "label": "Ordered",
+       "value": "5x"
+      }
+     ],
+     "actions": [
+      {
+       "id": "bs1",
+       "label": "Want",
+       "action": {
+        "type": "react",
+        "key": "☕"
+       }
+      }
+     ]
+    },
+    {
+     "title": "Croissant",
+     "subtitle": "Cafe Two",
+     "fields": [
+      {
+       "label": "Ordered",
+       "value": "4x"
+      }
+     ]
+    },
+    {
+     "title": "Orange juice",
+     "subtitle": "Cafe Two",
+     "fields": [
+      {
+       "label": "Ordered",
+       "value": "2x"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

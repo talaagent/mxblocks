@@ -1,0 +1,3 @@
+ticker + weather demo.
+PHP/THB 0.5340 THB ▲ +0.72% over 30d (ECB rate, oct 14). ₱10k is about ฿5,340.
+Example City now 29°C, mostly clear (H 35° L 27°). Fri 35/27 drizzle, Sat 35/26 drizzle, Sun 34/27 thunder, Mon 33/27 thunder. (open-meteo)

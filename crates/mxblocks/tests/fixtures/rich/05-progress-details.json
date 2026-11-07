@@ -1,0 +1,65 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "progress",
+   "title": "example project, oct 15",
+   "steps": [
+    {
+     "id": "lint",
+     "label": "lint",
+     "status": "done",
+     "ended_at": "2026-10-15T18:45:25Z"
+    },
+    {
+     "id": "unit",
+     "label": "unit tests",
+     "status": "done",
+     "ended_at": "2026-10-15T19:16:37Z"
+    },
+    {
+     "id": "retry",
+     "label": "fix retries on 429",
+     "status": "done",
+     "ended_at": "2026-10-15T19:40:36Z"
+    },
+    {
+     "id": "docs",
+     "label": "update the docs",
+     "status": "done",
+     "ended_at": "2026-10-15T20:06:22Z"
+    },
+    {
+     "id": "stream",
+     "label": "reply streaming",
+     "status": "done",
+     "ended_at": "2026-10-15T20:26:20Z"
+    },
+    {
+     "id": "e2e",
+     "label": "browser e2e (no webgl)",
+     "status": "failed",
+     "ended_at": "2026-10-15T20:38:16Z"
+    },
+    {
+     "id": "demo",
+     "label": "rich block demo (this)",
+     "status": "running",
+     "started_at": "2026-10-15T20:50:00Z",
+     "detail": "sending one message per block"
+    },
+    {
+     "id": "release",
+     "label": "release",
+     "status": "pending"
+    }
+   ],
+   "summary": "5 done, browser e2e still broken. release after this."
+  },
+  {
+   "type": "details",
+   "summary": "build log (6 notes)",
+   "body": "18:45 lint: clean after the formatter run\n19:16 unit tests: 412 passed\n19:40 retries on 429: the client now honours retry_after_ms\n20:06 docs: spec examples refreshed\n20:26 reply streaming: merged\n20:38 browser e2e: the headless browser has no webgl, the map test fails"
+  }
+ ]
+}

@@ -1,0 +1,22 @@
+[package]
+name = "mxblocks-asks"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "Reaction asks for Matrix bots: turn '[ask: ✅ deploy | ❌ skip]' in a reply into seeded reactions and mxblocks buttons"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+documentation = "https://docs.rs/mxblocks-asks"
+keywords = ["matrix", "reactions", "chatbot"]
+categories = ["text-processing"]
+
+[dependencies]
+mxblocks.workspace = true
+regex.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+
+[package.metadata.docs.rs]
+all-features = true

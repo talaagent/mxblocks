@@ -1,0 +1,22 @@
+[workspace]
+release_always = false
+changelog_update = true
+git_release_enable = true
+publish = true
+
+[[package]]
+name = "mxblocks"
+version_group = "mxblocks"
+changelog_path = "CHANGELOG.md"
+
+[[package]]
+name = "mxblocks-asks"
+version_group = "mxblocks"
+
+[[package]]
+name = "mxblocks-tex"
+version_group = "mxblocks"
+
+[[package]]
+name = "mxblocks-tools"
+version_group = "mxblocks"

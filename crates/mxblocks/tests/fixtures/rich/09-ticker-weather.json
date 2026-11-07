@@ -1,0 +1,74 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "ticker",
+   "symbol": "PHP/THB",
+   "name": "peso to baht, 30d",
+   "price": 0.53396,
+   "change": 0.0038,
+   "change_pct": 0.72,
+   "currency": "THB",
+   "series": [
+    0.53016,
+    0.53007,
+    0.53103,
+    0.53111,
+    0.52927,
+    0.53054,
+    0.53225,
+    0.53355,
+    0.5337,
+    0.53722,
+    0.53583,
+    0.53526,
+    0.53591,
+    0.53668,
+    0.53763,
+    0.53515,
+    0.53646,
+    0.53466,
+    0.53374,
+    0.53564,
+    0.53514,
+    0.53396
+   ]
+  },
+  {
+   "type": "weather",
+   "location": "Example City",
+   "temp": 29,
+   "unit": "C",
+   "condition": "Mostly clear",
+   "icon": "night",
+   "high": 35,
+   "low": 27,
+   "forecast": [
+    {
+     "label": "Fri",
+     "high": 35,
+     "low": 27,
+     "icon": "drizzle"
+    },
+    {
+     "label": "Sat",
+     "high": 35,
+     "low": 26,
+     "icon": "drizzle"
+    },
+    {
+     "label": "Sun",
+     "high": 34,
+     "low": 27,
+     "icon": "thunder"
+    },
+    {
+     "label": "Mon",
+     "high": 33,
+     "low": 27,
+     "icon": "thunder"
+    }
+   ]
+  }
+ ]
+}

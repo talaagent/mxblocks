@@ -1,0 +1,20 @@
+[package]
+name = "mxblocks"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "Rich message blocks (buttons, tables, charts, forms, ...) for Matrix bots: types, validation and the content-key compat rules"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+documentation = "https://docs.rs/mxblocks"
+keywords = ["matrix", "chatbot", "rich-messages"]
+categories = ["encoding", "api-bindings"]
+include = ["/src", "/tests", "/LICENSE", "/NOTICE", "/README.md", "/CHANGELOG.md"]
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+
+[package.metadata.docs.rs]
+all-features = true

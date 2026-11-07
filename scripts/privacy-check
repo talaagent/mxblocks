@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+"""Fail if any file in the tree matches a regex in scripts/privacy-patterns.
+
+Usage: scripts/privacy-check [ROOT]   (default: the repository root)
+
+The tree is walked from ROOT, skipping VCS metadata, build output,
+node_modules and lock files (their hashes are not ids). Binary files are
+skipped. Prints file and line locations for hits without exposing matched values.
+
+Patterns come from scripts/privacy-patterns (generic, in the repo) plus, if
+$MXBLOCKS_PRIVATE_PATTERNS is set, the file it names (private patterns that
+must not be committed, such as the real homeserver's domain). Without it
+the private part is skipped with a notice.
+"""
+
+import os
+import re
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+PATTERNS = os.path.join(HERE, "privacy-patterns")
+SKIP_DIRS = {".git", "target", "node_modules", "dist", ".direnv", ".turbo", ".pnpm-store"}
+SKIP_FILES = {".git", "Cargo.lock", "package-lock.json", "pnpm-lock.yaml", "flake.lock", "LICENSE"}
+
+
+def load_patterns(path):
+    out = []
+    with open(path, encoding="utf-8") as f:
+        for n, line in enumerate(f, 1):
+            line = line.rstrip("\n")
+            if line.strip() and not line.lstrip().startswith("#"):
+                try:
+                    out.append(re.compile(line))
+                except re.error as e:
+                    sys.exit(f"{path}:{n}: bad regex: {e}")
+    return out
+
+
+def main():
+    root = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(HERE))
+    patterns = load_patterns(PATTERNS)
+    private = os.environ.get("MXBLOCKS_PRIVATE_PATTERNS", "")
+    if private:
+        if not os.path.isfile(private):
+            sys.exit(f"privacy-check: MXBLOCKS_PRIVATE_PATTERNS={private}: no such file")
+        extra = load_patterns(private)
+        patterns += extra
+        print(f"privacy-check: {len(extra)} private pattern(s) loaded", file=sys.stderr)
+    else:
+        print(
+            "privacy-check: notice: MXBLOCKS_PRIVATE_PATTERNS is unset; "
+            "checking generic patterns only",
+            file=sys.stderr,
+        )
+    me = {os.path.abspath(PATTERNS)}
+    hits = 0
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = sorted(
+            d for d in dirnames if d not in SKIP_DIRS and not d.startswith("result")
+        )
+        for name in sorted(filenames):
+            path = os.path.join(dirpath, name)
+            if name in SKIP_FILES or name.startswith("result") or path in me:
+                continue
+            if os.path.islink(path):
+                continue
+            try:
+                with open(path, encoding="utf-8") as f:
+                    lines = f.readlines()
+            except (UnicodeDecodeError, OSError):
+                continue
+            rel = os.path.relpath(path, root)
+            for n, line in enumerate(lines, 1):
+                for p in patterns:
+                    for m in p.finditer(line):
+                        print(f"{rel}:{n}: privacy pattern matched (value redacted)")
+                        hits += 1
+    if hits:
+        print(f"privacy-check: {hits} hit(s); use example.org and invented ids", file=sys.stderr)
+        return 1
+    print("privacy-check: clean")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

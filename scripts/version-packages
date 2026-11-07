@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""Set both public npm package versions before merging an npm release."""
+import json
+from pathlib import Path
+import re
+import sys
+
+if len(sys.argv) != 2 or not re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", sys.argv[1]):
+    sys.exit("usage: pnpm version:packages <major.minor.patch>")
+root = Path(__file__).resolve().parent.parent
+for path in sorted((root / "packages").glob("*/package.json")):
+    manifest = json.loads(path.read_text())
+    manifest["version"] = sys.argv[1]
+    path.write_text(json.dumps(manifest, indent=2) + "\n")
+print("Update CHANGELOG.md, run pnpm check and pnpm artifacts, then commit the release.")

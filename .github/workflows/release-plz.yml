@@ -1,0 +1,106 @@
+# release-plz maintains release PRs and publishes merged releases.
+# Publishing uses crates.io OIDC trusted publishing, scoped to this workflow.
+# First publication of a new crate is bootstrapped separately with a scoped token.
+name: release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      bootstrap:
+        description: Publish the committed versions without requiring a new release PR
+        type: boolean
+        default: false
+      release_packages:
+        description: Optional comma-separated workspace packages for a staged initial release
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  release-pr:
+    if: ${{ !inputs.bootstrap }}
+    name: release PR
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      USE_BUILTIN_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN == '' }}
+    concurrency:
+      group: release-plz-pr-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - name: Check release PR setup
+        env:
+          HAS_CUSTOM_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN != '' }}
+          BUILTIN_PR_ENABLED: ${{ vars.RELEASE_PR == 'true' }}
+        run: |
+          if [ "$HAS_CUSTOM_TOKEN" != true ] && [ "$BUILTIN_PR_ENABLED" != true ]; then
+            echo "::error::Enable Actions-created pull requests in organization/repository settings, then set RELEASE_PR=true. RELEASE_PLZ_TOKEN is an optional alternative. See CONTRIBUTING.md."
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8
+        with:
+          toolchain: "1.98.1"
+      - uses: release-plz/action@v0.5
+        with:
+          command: release-pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Start CI for release PRs
+        if: env.USE_BUILTIN_TOKEN == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          BASE_BRANCH: ${{ github.ref_name }}
+        run: |
+          gh pr list --base "$BASE_BRANCH" --state open \
+            --json headRefName,headRefOid,isCrossRepository \
+            --jq '.[] | select(.isCrossRepository == false) | select(.headRefName | startswith("release-plz-")) | [.headRefName, .headRefOid] | @tsv' |
+          while IFS=$'\t' read -r branch sha; do
+            runs=$(gh run list --workflow ci.yml --commit "$sha" --limit 1 --json databaseId --jq 'length')
+            if [ "$runs" = 0 ]; then
+              gh workflow run ci.yml --ref "$branch"
+            fi
+          done
+
+  release:
+    name: publish
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+      pull-requests: read
+      id-token: write
+    concurrency:
+      group: release-plz-release-${{ github.ref }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8
+        with:
+          toolchain: "1.98.1"
+      - name: Prepare manual release
+        if: inputs.bootstrap
+        env:
+          RELEASE_PACKAGES: ${{ inputs.release_packages }}
+        run: python3 scripts/prepare-manual-release "$RUNNER_TEMP/release-plz-manual.toml"
+      - uses: release-plz/action@v0.5
+        with:
+          command: release
+          config: ${{ inputs.bootstrap && format('{0}/release-plz-manual.toml', runner.temp) || 'release-plz.toml' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PLZ_TOKEN || secrets.GITHUB_TOKEN }}

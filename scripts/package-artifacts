@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Build versioned deployment assets and npm archives from the workspace build."""
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import tarfile
+
+root = Path(__file__).resolve().parent.parent
+out = root / "artifacts"
+out.mkdir(exist_ok=True)
+artifacts = []
+versions = {}
+for short in ("element", "math"):
+    package = root / "packages" / f"mxblocks-{short}"
+    manifest = json.loads((package / "package.json").read_text())
+    name, version = manifest["name"], manifest["version"]
+    versions[name] = version
+    subprocess.run(["pnpm", "--filter", name, "pack", "--pack-destination", str(out)], cwd=root, check=True)
+    archive = out / f"talaagent-mxblocks-{short}-{version}.tgz"
+    with tarfile.open(archive) as packed:
+        names = set(packed.getnames())
+        required = {"package/package.json", "package/LICENSE", "package/NOTICE", "package/README.md"}
+        required.add("package/dist/mxblocks-rich.js" if short == "element" else "package/src/mxblocks-math.mjs")
+        if not required <= names:
+            raise SystemExit(f"{archive.name}: missing files: {sorted(required - names)}")
+    artifacts.append(archive)
+    if short == "element":
+        archive = out / f"mxblocks-element-assets-{version}.tar.gz"
+        with tarfile.open(archive, "w:gz") as packed:
+            for path in sorted((package / "dist").iterdir()):
+                packed.add(path, arcname=path.name)
+            for filename in ("LICENSE", "NOTICE", "README.md", "config.example.json"):
+                packed.add(package / filename, arcname=filename)
+        artifacts.append(archive)
+metadata = {
+    "schema": 1,
+    "packages": versions,
+    "element": {"entrypoint": "mxblocks-rich.js", "fonts": "fonts/", "moduleApi": "^2.2.0"},
+    "math": {"command": "mxblocks-math", "node": ">=24", "externalRequirements": ["resvg", "fonts"]},
+    "files": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in artifacts},
+}
+manifest = out / "manifest.json"
+manifest.write_text(json.dumps(metadata, indent=2) + "\n")
+artifacts.append(manifest)
+(out / "SHA256SUMS").write_text("".join(f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n" for p in artifacts))
+print(f"Verified {len(artifacts)} artifacts in {out}")

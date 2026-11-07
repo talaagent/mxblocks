@@ -1,0 +1,16 @@
+name: Bug report
+description: Report a reproducible mxblocks problem
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Package and version
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Synthetic reproduction
+      description: Include expected and actual behavior. Replace private messages, server names, user IDs, and credentials with invented examples.
+    validations:
+      required: true

@@ -1,0 +1,8 @@
+math, gallery, form and file demo. ∫₀^∞ e^(-x²) dx = √π/2
+Unit 12B: front, back
+Book a table
+1. When (YYYY-MM-DD)
+2. How many: 1) 2 2) 4 3) 6 people
+3. Vegetarian (yes/no, optional)
+Reply with the numbers, e.g. "1: 2026-10-17; 2: 1".
+report.pdf (47 KB)

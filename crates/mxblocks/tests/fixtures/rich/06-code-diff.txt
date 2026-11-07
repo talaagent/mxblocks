@@ -1,0 +1,34 @@
+code + diff demo. tiny bpaf derive cli, then the patch adding --rich:
+```rust
+use bpaf::Bpaf;
+
+#[derive(Debug, Clone, Bpaf)]
+#[bpaf(options, version)]
+/// send a message as a bot
+struct Say {
+    /// seconds to wait for the reply
+    #[bpaf(argument("TIMEOUT"), fallback(30))]
+    timeout: u64,
+    /// the bot to send as
+    #[bpaf(positional("NAME"))]
+    name: String,
+}
+
+fn main() {
+    let opts = say().run();
+    println!("{opts:?}");
+}
+```
+```diff
+--- a/src/say.rs
++++ b/src/say.rs
+@@ -6,6 +6,9 @@ struct Say {
+     #[bpaf(argument("TIMEOUT"), fallback(30))]
+     timeout: u64,
++    /// a full mxblocks payload: JSON, @FILE or -
++    #[bpaf(argument("JSON"), optional)]
++    rich: Option<String>,
+     /// the bot to send as
+     #[bpaf(positional("NAME"))]
+     name: String,
+```

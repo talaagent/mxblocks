@@ -1,0 +1,40 @@
+{
+  "name": "@talaagent/mxblocks-math",
+  "version": "0.1.0",
+  "description": "Server-side LaTeX to PNG for mxblocks math messages (MathJax SVG + resvg)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talaagent/mxblocks.git",
+    "directory": "packages/mxblocks-math"
+  },
+  "type": "module",
+  "bin": {
+    "mxblocks-math": "src/mxblocks-math.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "typecheck": "node --check src/mxblocks-math.mjs",
+    "build": "node --check src/mxblocks-math.mjs"
+  },
+  "dependencies": {
+    "mathjax-full": "3.2.2"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/talaagent/mxblocks/tree/main/packages/mxblocks-math#readme",
+  "bugs": {
+    "url": "https://github.com/talaagent/mxblocks/issues"
+  }
+}

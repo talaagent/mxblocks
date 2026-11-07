@@ -1,0 +1,56 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "buttons",
+   "buttons": [
+    {
+     "id": "noodles",
+     "label": "Noodle bar",
+     "style": "primary",
+     "action": {
+      "type": "react",
+      "key": "🍜"
+     }
+    },
+    {
+     "id": "pizza",
+     "label": "Pizza place",
+     "action": {
+      "type": "react",
+      "key": "🍕"
+     }
+    }
+   ]
+  },
+  {
+   "type": "chips",
+   "chips": [
+    {
+     "id": "surprise",
+     "label": "surprise me",
+     "action": {
+      "type": "react",
+      "key": "🎲"
+     }
+    },
+    {
+     "id": "new",
+     "label": "something new",
+     "action": {
+      "type": "react",
+      "key": "✨"
+     }
+    },
+    {
+     "id": "skip",
+     "label": "skip dinner",
+     "action": {
+      "type": "react",
+      "key": "🙅"
+     }
+    }
+   ]
+  }
+ ]
+}

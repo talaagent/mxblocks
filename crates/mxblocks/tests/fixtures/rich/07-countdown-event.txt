@@ -1,0 +1,2 @@
+countdown + event demo. the new year starts jan 1, 2027, 00:00 UTC.
+sample event: saturday market run, sat oct 17, 7:00 to 9:00 UTC, Central Park, Example City.

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "globalDependencies": [
+    "crates/mxblocks/tests/fixtures/rich/**"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "typecheck": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": []
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [],
+      "env": [
+        "MXBLOCKS_MATH_BIN",
+        "MXBLOCKS_MATH_RESVG",
+        "MXBLOCKS_MATH_FONT_DIR"
+      ]
+    }
+  }
+}

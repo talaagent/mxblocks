@@ -1,0 +1,7 @@
+table demo. sample shops, 39 orders (invented data):
+1. Bakery One (9)
+2. Cafe Two (8)
+3. Deli Three (7)
+4. Diner Four (6)
+5. Kitchen Five (5)
+6. Bistro Six (4)

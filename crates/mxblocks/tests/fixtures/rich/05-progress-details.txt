@@ -1,0 +1,17 @@
+progress + details demo. today's build:
+✅ lint
+✅ unit tests
+✅ fix retries on 429
+✅ update the docs
+✅ reply streaming
+❌ browser e2e (no webgl)
+⏳ rich block demo (this)
+⬜ release
+
+build log:
+18:45 lint: clean after the formatter run
+19:16 unit tests: 412 passed
+19:40 retries on 429: the client now honours retry_after_ms
+20:06 docs: spec examples refreshed
+20:26 reply streaming: merged
+20:38 browser e2e: the headless browser has no webgl, the map test fails

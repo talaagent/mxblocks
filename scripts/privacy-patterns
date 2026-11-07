@@ -1,0 +1,29 @@
+# scripts/privacy-check: one Python regex per line; any match in the tree
+# fails the check. Blank lines and lines starting with # are ignored. Use
+# example.org / example.com / example.net and invented ids in tests and docs.
+#
+# Only generic patterns live here. Patterns that would themselves name a
+# real server, person or business are private: they are read from the file
+# named by $MXBLOCKS_PRIVATE_PATTERNS (same format), kept outside the repo.
+
+# Matrix user ids on a real server.
+@[A-Za-z0-9._=/+-]+:(?!example\.(?:org|com|net)\b|[a-z]\b)[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}
+
+# Room ids and aliases on a real server.
+[!#][A-Za-z0-9._=+-]{4,}:(?!example\.(?:org|com|net)\b)[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}
+
+# Media on a real server.
+mxc://(?!example\.(?:org|com|net)/)[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/
+
+# Bridge puppets (Instagram, WhatsApp, Signal, ...).
+@(?:instagram|ig|meta|facebook|fb|messenger|whatsapp|signal|telegram|slack|discord|linkedin|gmessages)_[A-Za-z0-9]
+
+# Long numeric ids: phone numbers, Instagram / Facebook / Slack user ids.
+# 2^53 + 1 and millisecond timestamps (17xxxxxxxxxxx) are allowed.
+(?<![0-9A-Za-z.+/=_-])(?!9007199254740993(?![0-9])|17[0-9]{11}(?![0-9]))[0-9]{11,}(?![0-9A-Za-z])
+
+# Slack workspace, user and channel ids.
+\b[TUWC]0[A-Z0-9]{7,}\b
+
+# Phone numbers in international form.
+\+[1-9][0-9]{1,3}[ -]?[0-9]{3}[ -]?[0-9]{3}[ -]?[0-9]{3,4}\b

@@ -1,0 +1,56 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "table",
+   "caption": "Sample shops (invented data)",
+   "columns": [
+    {
+     "key": "place",
+     "label": "Place"
+    },
+    {
+     "key": "orders",
+     "label": "Orders",
+     "align": "right"
+    },
+    {
+     "key": "usual",
+     "label": "Usual order"
+    }
+   ],
+   "rows": [
+    {
+     "place": "Bakery One",
+     "orders": 9,
+     "usual": "Seed loaf"
+    },
+    {
+     "place": "Cafe Two",
+     "orders": 8,
+     "usual": "Flat white"
+    },
+    {
+     "place": "Deli Three",
+     "orders": 7,
+     "usual": "Club sandwich"
+    },
+    {
+     "place": "Diner Four",
+     "orders": 6,
+     "usual": "Pancake stack"
+    },
+    {
+     "place": "Kitchen Five",
+     "orders": 5,
+     "usual": "Veggie curry"
+    },
+    {
+     "place": "Bistro Six",
+     "orders": 4,
+     "usual": "Tomato soup"
+    }
+   ]
+  }
+ ]
+}

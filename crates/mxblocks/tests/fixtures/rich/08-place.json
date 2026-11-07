@@ -1,0 +1,15 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "place",
+   "name": "Soba Shop",
+   "address": "1 Main Street, Example City"
+  },
+  {
+   "type": "place",
+   "name": "Saturday Market",
+   "address": "Central Park, Example City"
+  }
+ ]
+}

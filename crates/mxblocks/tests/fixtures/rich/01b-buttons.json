@@ -1,0 +1,27 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "buttons",
+   "buttons": [
+    {
+     "id": "noodles",
+     "label": "Noodle bar",
+     "style": "primary",
+     "action": {
+      "type": "react",
+      "key": "🍜"
+     }
+    },
+    {
+     "id": "pizza",
+     "label": "Pizza place",
+     "action": {
+      "type": "react",
+      "key": "🍕"
+     }
+    }
+   ]
+  }
+ ]
+}

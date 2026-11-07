@@ -1,0 +1,72 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "math",
+   "tex": "\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}",
+   "display": true,
+   "alt": "Gaussian integral"
+  },
+  {
+   "type": "gallery",
+   "title": "Unit 12B",
+   "images": [
+    {
+     "url": "mxc://example.org/front",
+     "alt": "front",
+     "w": 1200,
+     "h": 800,
+     "mimetype": "image/jpeg"
+    },
+    {
+     "url": "mxc://example.org/back",
+     "alt": "back"
+    }
+   ]
+  },
+  {
+   "type": "form",
+   "id": "book",
+   "title": "Book a table",
+   "fields": [
+    {
+     "id": "date",
+     "kind": "date",
+     "label": "When",
+     "required": true,
+     "min": "2026-10-15"
+    },
+    {
+     "id": "party",
+     "kind": "select",
+     "label": "How many",
+     "required": true,
+     "default": "2",
+     "options": [
+      "2",
+      "4",
+      {
+       "value": "6",
+       "label": "6 people"
+      }
+     ]
+    },
+    {
+     "id": "veg",
+     "kind": "checkbox",
+     "label": "Vegetarian"
+    }
+   ],
+   "submit": {
+    "label": "Book"
+   }
+  },
+  {
+   "type": "file",
+   "name": "report.pdf",
+   "size": 48213,
+   "mimetype": "application/pdf",
+   "url": "mxc://example.org/f"
+  }
+ ]
+}

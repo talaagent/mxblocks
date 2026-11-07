@@ -1,0 +1,33 @@
+# cargo-deny: permissive licenses only. Copyleft dependencies are not allowed.
+[graph]
+all-features = true
+
+[licenses]
+allow = [
+  "Apache-2.0",
+  "Apache-2.0 WITH LLVM-exception",
+  "MIT",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "ISC",
+  "Unicode-3.0",
+  "Unicode-DFS-2016",
+  "Zlib",
+  "CC0-1.0",
+]
+confidence-threshold = 0.9
+# The list is a policy, not an inventory: allowances may go unused.
+unused-allowed-license = "allow"
+
+[bans]
+deny = [{ name = "chrono", reason = "Use jiff for date/time handling" }]
+multiple-versions = "warn"
+wildcards = "deny"
+
+[advisories]
+yanked = "deny"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]

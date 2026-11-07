@@ -1,0 +1,8 @@
+{
+  "modules": ["/modules/mxblocks-rich.js"],
+  "com.talaagent.mxblocks": {
+    "senders": ["@bot:example.org"],
+    "write_key": "org.example.blocks",
+    "read_keys": []
+  }
+}

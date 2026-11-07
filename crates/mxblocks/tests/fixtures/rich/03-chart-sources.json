@@ -1,0 +1,57 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "chart",
+   "kind": "area",
+   "title": "ONI (Niño 3.4 anomaly)",
+   "unit": "°C",
+   "labels": [
+    "OND 25",
+    "NDJ",
+    "DJF 26",
+    "JFM",
+    "FMA",
+    "MAM",
+    "AMJ",
+    "MJJ",
+    "JJA",
+    "JAS 26"
+   ],
+   "series": [
+    {
+     "name": "ONI",
+     "values": [
+      -0.61,
+      -0.6,
+      -0.39,
+      -0.21,
+      0.11,
+      0.46,
+      0.95,
+      1.39,
+      1.8,
+      2.16
+     ]
+    }
+   ]
+  },
+  {
+   "type": "sources",
+   "sources": [
+    {
+     "title": "CPC ONI v5 data",
+     "url": "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"
+    },
+    {
+     "title": "CPC ENSO diagnostic discussion",
+     "url": "https://www.cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml"
+    },
+    {
+     "title": "PAGASA El Niño / La Niña monitoring",
+     "url": "https://www.pagasa.dost.gov.ph/climate/el-nino-la-nina/monitoring"
+    }
+   ]
+  }
+ ]
+}

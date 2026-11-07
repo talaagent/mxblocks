@@ -1,0 +1,24 @@
+[package]
+name = "mxblocks-tex"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "Math messages for mxblocks: run the mxblocks-math renderer and build the m.image event (MSC2191 markup, caption)"
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+documentation = "https://docs.rs/mxblocks-tex"
+keywords = ["matrix", "latex", "math", "chatbot"]
+categories = ["api-bindings"]
+
+[dependencies]
+mxblocks.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["fs", "io-util", "process", "time"] }
+
+[dev-dependencies]
+tempfile.workspace = true
+tokio = { workspace = true, features = ["fs", "io-util", "macros", "process", "rt-multi-thread", "time"] }
+
+[package.metadata.docs.rs]
+all-features = true

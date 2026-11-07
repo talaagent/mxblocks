@@ -1,0 +1,18 @@
+{
+ "v": 1,
+ "blocks": [
+  {
+   "type": "countdown",
+   "until": "2027-01-01T00:00:00Z",
+   "label": "new year"
+  },
+  {
+   "type": "event",
+   "title": "Saturday market run (sample)",
+   "start": "2026-10-17T07:00:00Z",
+   "end": "2026-10-17T09:00:00Z",
+   "location": "Central Park, Example City",
+   "description": "Go early before the crowd. Sample event for the rich block demo."
+  }
+ ]
+}
