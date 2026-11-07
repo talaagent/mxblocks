@@ -54,7 +54,7 @@ jobs:
             if [ "$status" = 200 ]; then
               echo "$name@$version already published"
             elif [ "$status" = 404 ]; then
-              npm publish "artifacts/talaagent-mxblocks-$package-$version.tgz" --access public --provenance
+              npm publish "./artifacts/talaagent-mxblocks-$package-$version.tgz" --access public --provenance
             else
               echo "::error::Registry lookup failed for $name@$version: HTTP $status"
               exit 1
