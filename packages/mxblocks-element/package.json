@@ -15,11 +15,11 @@
     "build": "esbuild src/index.tsx --bundle --format=esm --target=es2022 --minify --sourcemap --jsx=transform --jsx-factory=React.createElement --jsx-fragment=React.Fragment --loader:.css=text --outfile=dist/mxblocks-rich.js && mkdir -p dist/fonts && cp node_modules/katex/dist/fonts/*.woff2 dist/fonts/"
   },
   "devDependencies": {
-    "@types/node": "^24.19.2",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.1.0",
     "katex": "^0.19.1",
     "typescript": "^7.0.2",
-    "esbuild": "0.27.2"
+    "esbuild": "0.28.2"
   },
   "engines": {
     "node": ">=24.21.0"
