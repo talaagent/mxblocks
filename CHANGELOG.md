@@ -41,6 +41,12 @@ under Changed.
 
 ## Unreleased workspace changes
 
+## [0.1.0](https://github.com/talaagent/mxblocks/releases/tag/mxblocks-v0.1.0) - 2026-11-07
+
+### Other
+
+- Open-source mxblocks: Rust workspace, scoped npm packages, and deployment assets
+
 - Move every Rust crate under crates/ with shared workspace metadata.
 - Add a pnpm/Turborepo workspace for the Element module and math CLI.
 - Let applications configure reader aliases and writer namespaces, including reply and album keys.
