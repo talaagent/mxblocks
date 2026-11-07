@@ -6,6 +6,12 @@ crate uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1](https://github.com/talaagent/mxblocks/compare/mxblocks-v0.1.0...mxblocks-v0.1.1) - 2026-11-07
+
+### Other
+
+- Refresh Nix inputs and keep npm tooling compatible with the supported runtime
+
 ## [0.1.0] - 2026-11-07
 
 First release as a standalone crate. It unifies two earlier
