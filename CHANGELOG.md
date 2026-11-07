@@ -6,6 +6,8 @@ crate uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-07
+
 First release as a standalone crate. It unifies two earlier
 implementations of the format, one in a Matrix client and one in a bot,
 which had drifted apart. Where they differed, the choices are listed
@@ -21,7 +23,7 @@ under Changed.
   asks: `[ask: …]` markers and the safety net, planned into messages with
   buttons and seeds) and `mxblocks-tools` (`rich_send` / `rich_edit` tool
   specs and argument checks).
-- Three content keys, read newest first: `com.talaagent.mxblocks`,
+- Two content keys, read newest first: `com.talaagent.mxblocks`,
   `com.ianm.mtrix` (`RICH_KEYS`, `USED_KEYS`,
   `ALBUM_KEYS`).
 - `WriteKey` picks the one key a writer uses. The default, `Legacy`, writes
@@ -30,7 +32,7 @@ under Changed.
 
 ### Changed
 
-- The sample payloads in `tests/fixtures/rich/` use invented shops, items
+- The sample payloads in `crates/mxblocks/tests/fixtures/rich/` use invented shops, items
   and people only.
 - **One math block per message.** `Rich::validate` now rejects a payload
   with more than one `math` block ("at most one math block per message").
@@ -39,7 +41,7 @@ under Changed.
   `Rich::math` is the constructor. Code that used `Rich::math()` as an
   accessor must switch to `find_math()`.
 
-## Unreleased workspace changes
+### Workspace
 
 - Move every Rust crate under crates/ with shared workspace metadata.
 - Add a pnpm/Turborepo workspace for the Element module and math CLI.

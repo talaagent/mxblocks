@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   publish:
-    if: ${{ !github.event.repository.private }}
+    if: ${{ !github.event.repository.private && vars.NPM_RELEASE == 'true' }}
     runs-on: ubuntu-latest
     environment: npm
     permissions:
