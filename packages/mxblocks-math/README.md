@@ -8,7 +8,7 @@ mxblocks-math render --out formula.png 'x^2 + y^2 = z^2'
 printf '%s' '\frac{a}{b}' | mxblocks-math render --inline --out fraction.png -
 ```
 
-Node 24 or newer, `resvg`, and fonts are required. Set `MXBLOCKS_MATH_RESVG` and
+Node 24.21 or newer, `resvg`, and fonts are required. Set `MXBLOCKS_MATH_RESVG` and
 `MXBLOCKS_MATH_FONT_DIR` when they are not available through the environment.
 `nix build .#mxblocks-math` provides a wrapper with pinned dependencies, fonts,
 and a wall-clock timeout. For development, `nix develop` supplies the same tools.

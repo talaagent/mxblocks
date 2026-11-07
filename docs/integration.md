@@ -57,7 +57,7 @@ pnpm add @talaagent/mxblocks-math
 pnpm exec mxblocks-math render --out formula.png 'x^2 + y^2 = z^2'
 ```
 
-The npm CLI requires Node 24+, `resvg`, and fonts. Configure
+The npm CLI requires Node 24.21+, `resvg`, and fonts. Configure
 `MXBLOCKS_MATH_RESVG` and `MXBLOCKS_MATH_FONT_DIR` explicitly in a service. It reads
 TeX from stdin when the last argument is `-` and returns one JSON line containing
 `mimetype`, `w`, `h`, and `size`. `mxblocks_tex::Renderer` consumes this contract.

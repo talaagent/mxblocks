@@ -63,7 +63,7 @@
             version = "0.1.0";
             src = jsSrc;
             fetcherVersion = 5;
-            hash = "sha256-oPzRUen72Wz9k2zO9hyLViLl5A9UO4p0Vw5p5XStrUY=";
+            hash = "sha256-Js1HHFXMXO9B+UwCgDv9tNjaWxONpqEAEik+EDRngC4=";
           };
         in
         {
