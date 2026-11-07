@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation {
   pname = "mxblocks-element";
-  version = "0.1.0";
+  version = (lib.importJSON ./package.json).version;
   inherit src pnpmDeps;
   nativeBuildInputs = [
     nodejs

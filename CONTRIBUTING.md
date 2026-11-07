@@ -45,7 +45,9 @@ that do not exist, and attaches deployment assets to a GitHub release. Network
 errors fail the release rather than being interpreted as missing versions.
 First publish each package with npm organization access, then configure its
 GitHub trusted publisher: owner `talaagent`, repo `mxblocks`, workflow
-`npm-release.yml`, environment `npm`, with direct publishing allowed. The workflow
+`npm-release.yml`, environment `npm`, with direct publishing allowed. Set the repository variable `NPM_RELEASE=true`
+after both publishers are configured. Until then, CI still builds and uploads
+the tested deployment archives. The workflow
 uses npm OIDC and provenance; no npm token is stored in Actions. Run
 `pnpm artifacts` before merging a package release and inspect the archives.
 

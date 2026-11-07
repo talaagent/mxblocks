@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   publish:
-    if: ${{ !github.event.repository.private }}
+    if: ${{ !github.event.repository.private && vars.NPM_RELEASE == 'true' }}
     runs-on: ubuntu-latest
     environment: npm
     permissions:
@@ -29,8 +29,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
@@ -54,13 +54,13 @@ jobs:
             if [ "$status" = 200 ]; then
               echo "$name@$version already published"
             elif [ "$status" = 404 ]; then
-              npm publish "artifacts/talaagent-mxblocks-$package-$version.tgz" --access public --provenance
+              npm publish "./artifacts/talaagent-mxblocks-$package-$version.tgz" --access public --provenance
             else
               echo "::error::Registry lookup failed for $name@$version: HTTP $status"
               exit 1
             fi
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: mxblocks-npm-${{ github.sha }}
           path: artifacts/*
