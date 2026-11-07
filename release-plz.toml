@@ -6,17 +6,21 @@ publish = true
 
 [[package]]
 name = "mxblocks"
+git_release_latest = true
 version_group = "mxblocks"
 changelog_path = "CHANGELOG.md"
 
 [[package]]
 name = "mxblocks-asks"
+git_release_latest = false
 version_group = "mxblocks"
 
 [[package]]
 name = "mxblocks-tex"
+git_release_latest = false
 version_group = "mxblocks"
 
 [[package]]
 name = "mxblocks-tools"
+git_release_latest = false
 version_group = "mxblocks"
