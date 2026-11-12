@@ -62,8 +62,10 @@
             pname = "mxblocks-pnpm-deps";
             version = "0.1.0";
             src = jsSrc;
-            fetcherVersion = 5;
-            hash = "sha256-Js1HHFXMXO9B+UwCgDv9tNjaWxONpqEAEik+EDRngC4=";
+            # 4, not 5: consumers that make nixpkgs follow theirs may pin a
+            # nixpkgs without 5 (e.g. 26.11.20261015); 4 hashes the same on both.
+            fetcherVersion = 4;
+            hash = "sha256-CdZItLTnSIaPnAefnRK0QsQ1oUQ/aJJETY45RfcSis8=";
           };
         in
         {
