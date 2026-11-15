@@ -108,7 +108,7 @@ nix flake check -L
 Nix uses the same pnpm workspace and lockfile. See the package READMEs for
 [Element installation](packages/mxblocks-element/README.md) and the
 [math CLI](packages/mxblocks-math/README.md), and
-[CONTRIBUTING.md](CONTRIBUTING.md) for release and privacy checks.
+[CONTRIBUTING.md](CONTRIBUTING.md) for privacy checks and [RELEASING.md](RELEASING.md) for releases.
 
 ## License
 
