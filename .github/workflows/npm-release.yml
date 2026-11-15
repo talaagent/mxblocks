@@ -44,6 +44,10 @@ jobs:
       - run: nix develop --command python3 scripts/test-artifacts
       - name: Publish new versions
         shell: bash
+        env:
+          # Normally empty: npm uses OIDC trusted publishing. Only for the one-time
+          # bootstrap of a package that does not exist yet (see RELEASING.md).
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_BOOTSTRAP_TOKEN }}
         run: |
           for package in element math; do
             manifest="packages/mxblocks-$package/package.json"

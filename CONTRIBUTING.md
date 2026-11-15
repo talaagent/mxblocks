@@ -31,25 +31,9 @@ implicitly accept unconfigured aliases.
 ## Packages and releases
 
 Rust packages share version/edition/license/MSRV/dependencies at the root.
-release-plz handles Rust release PRs and crates.io publication through OIDC.
-Actions-created PRs are enabled at the organization/repository level; RELEASE_PR=true
-allows the built-in GitHub token to create them. CI is dispatched explicitly for
-these PRs. First publication uses a scoped maintainer token locally, followed by a
-trusted publisher for each crate (`release-plz.yml`, environment `release`). No
-long-lived crates.io token is stored in Actions.
-
-JavaScript packages are public under `@talaagent`. Use
-`pnpm version:packages <major.minor.patch>` and describe changes in CHANGELOG.md.
-On merge to main, `npm-release.yml` checks the registry, publishes only versions
-that do not exist, and attaches deployment assets to a GitHub release. Network
-errors fail the release rather than being interpreted as missing versions.
-First publish each package with npm organization access, then configure its
-GitHub trusted publisher: owner `talaagent`, repo `mxblocks`, workflow
-`npm-release.yml`, environment `npm`, with direct publishing allowed. Set the repository variable `NPM_RELEASE=true`
-after both publishers are configured. Until then, CI still builds and uploads
-the tested deployment archives. The workflow
-uses npm OIDC and provenance; no npm token is stored in Actions. Run
-`pnpm artifacts` before merging a package release and inspect the archives.
+release-plz publishes the crates and `npm-release.yml` publishes the npm packages,
+both through OIDC trusted publishing. See [RELEASING.md](RELEASING.md) for the
+release flow and the one-time owner setup.
 
 The Element bundle is a runtime module and uses the host's React, not a bundled
 React instance. The math CLI needs a separately installed resvg and fonts; its
