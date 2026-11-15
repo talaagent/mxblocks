@@ -2,6 +2,13 @@
   "name": "@talaagent/mxblocks-element",
   "version": "0.1.0",
   "description": "Element Web runtime module rendering mxblocks rich message blocks",
+  "keywords": [
+    "matrix",
+    "element-web",
+    "module",
+    "rich-messages",
+    "chatbot"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -12,7 +19,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "node --test 'test/*.test.ts'",
-    "build": "esbuild src/index.tsx --bundle --format=esm --target=es2022 --minify --sourcemap --jsx=transform --jsx-factory=React.createElement --jsx-fragment=React.Fragment --loader:.css=text --outfile=dist/mxblocks-rich.js && mkdir -p dist/fonts && cp node_modules/katex/dist/fonts/*.woff2 dist/fonts/"
+    "build": "esbuild src/index.tsx --bundle --format=esm --target=es2022 --minify --sourcemap --jsx=transform --jsx-factory=React.createElement --jsx-fragment=React.Fragment --loader:.css=text --outfile=dist/mxblocks-rich.js && mkdir -p dist/fonts && cp node_modules/katex/dist/fonts/*.woff2 dist/fonts/",
+    "prepack": "pnpm run build"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",

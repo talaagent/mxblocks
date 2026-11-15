@@ -2,6 +2,13 @@
   "name": "@talaagent/mxblocks-math",
   "version": "0.1.0",
   "description": "Server-side LaTeX to PNG for mxblocks math messages (MathJax SVG + resvg)",
+  "keywords": [
+    "matrix",
+    "latex",
+    "mathjax",
+    "png",
+    "cli"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
