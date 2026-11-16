@@ -8,6 +8,9 @@ mxblocks-math render --out formula.png 'x^2 + y^2 = z^2'
 printf '%s' '\frac{a}{b}' | mxblocks-math render --inline --out fraction.png -
 ```
 
+This package is private: it is not published to npm. Use the Nix package
+(`nix build github:talaagent/mxblocks#mxblocks-math`) or run it from a checkout.
+
 Node 24.21 or newer, `resvg`, and fonts are required. Set `MXBLOCKS_MATH_RESVG` and
 `MXBLOCKS_MATH_FONT_DIR` when they are not available through the environment.
 `nix build .#mxblocks-math` provides a wrapper with pinned dependencies, fonts,

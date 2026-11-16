@@ -4,7 +4,6 @@
 [![crates.io](https://img.shields.io/crates/v/mxblocks.svg)](https://crates.io/crates/mxblocks)
 [![Rust docs](https://docs.rs/mxblocks/badge.svg)](https://docs.rs/mxblocks)
 [![Element npm](https://img.shields.io/npm/v/@talaagent/mxblocks-element.svg?label=Element)](https://www.npmjs.com/package/@talaagent/mxblocks-element)
-[![Math npm](https://img.shields.io/npm/v/@talaagent/mxblocks-math.svg?label=math)](https://www.npmjs.com/package/@talaagent/mxblocks-math)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 Rich message blocks for Matrix bots: buttons, chips, tables, charts, cards,
@@ -24,7 +23,7 @@ their payload namespace and its compatibility aliases.
 | `crates/mxblocks-tex` | `mxblocks-tex` | math renderer integration and Matrix image events |
 | `crates/mxblocks-tools` | `mxblocks-tools` | rich_send/rich_edit definitions and validation |
 | `packages/mxblocks-element` | `@talaagent/mxblocks-element` | Element Web runtime renderer |
-| `packages/mxblocks-math` | `@talaagent/mxblocks-math` | MathJax + resvg LaTeX-to-PNG CLI |
+| `packages/mxblocks-math` | `@talaagent/mxblocks-math` (private, not on npm) | MathJax + resvg LaTeX-to-PNG CLI |
 
 Cargo metadata/dependencies are shared at the virtual workspace root. JavaScript
 packages use one pnpm lockfile; Turborepo runs their builds, tests, and typechecks.
@@ -35,8 +34,12 @@ and can be packed independently.
 
 ```sh
 cargo add mxblocks
-pnpm add @talaagent/mxblocks-element @talaagent/mxblocks-math
+pnpm add @talaagent/mxblocks-element
+nix build github:talaagent/mxblocks#mxblocks-math   # math CLI: result/bin/mxblocks-math
 ```
+
+The math CLI is not published to npm. Use the Nix package, or build it from
+`packages/mxblocks-math` in this repository.
 
 Rust APIs: [mxblocks](https://docs.rs/mxblocks),
 [mxblocks-asks](https://docs.rs/mxblocks-asks),

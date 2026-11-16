@@ -1,5 +1,6 @@
 //! Math messages: a formula rendered to a PNG by the `mxblocks-math`
-//! program (npm `@talaagent/mxblocks-math`, a runtime dependency) and sent as an `m.image`.
+//! program (`nix build github:talaagent/mxblocks#mxblocks-math`, a runtime
+//! dependency) and sent as an `m.image`.
 //!
 //! The renderer's contract: `mxblocks-math render [--inline] --out PATH.png -`
 //! with the LaTeX on stdin, exit 0 and one JSON line on stdout

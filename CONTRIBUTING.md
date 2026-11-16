@@ -31,8 +31,22 @@ implicitly accept unconfigured aliases.
 ## Packages and releases
 
 Rust packages share version/edition/license/MSRV/dependencies at the root.
-release-plz publishes the crates and `npm-release.yml` publishes the npm packages,
-both through OIDC trusted publishing. See [RELEASING.md](RELEASING.md) for the
+release-plz publishes the crates and `npm-release.yml` publishes
+`@talaagent/mxblocks-element`, both through OIDC trusted publishing.
+`@talaagent/mxblocks-math` is private and not published to npm.
+
+If your PR changes what `@talaagent/mxblocks-element` ships (its source, build or
+package files), add a changeset:
+
+```sh
+pnpm changeset
+```
+
+Pick the package and a semver bump, write a one-line summary for the changelog,
+and commit the generated `.changeset/*.md` file with the PR. Don't edit package
+versions or the package `CHANGELOG.md` by hand; the Version Packages PR does
+that. Rust crates need no changeset; their changelogs come from conventional
+commit titles. See [RELEASING.md](RELEASING.md) for the
 release flow and the one-time owner setup.
 
 The Element bundle is a runtime module and uses the host's React, not a bundled

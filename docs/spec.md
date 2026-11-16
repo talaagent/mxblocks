@@ -1197,8 +1197,8 @@ it, the block shows the TeX source in `<code>`.
 
 #### The PNG renderer: `mxblocks-math`
 
-The PNG comes from the `mxblocks-math` npm package (`packages/mxblocks-math/` in this repo,
-`nix build .#mxblocks-math`; the binary is named `mxblocks-math`): MathJax 3
+The PNG comes from the `mxblocks-math` CLI (`packages/mxblocks-math/` in this repo,
+`nix build .#mxblocks-math`; not published to npm; the binary is named `mxblocks-math`): MathJax 3
 (TeX input, SVG output with every glyph as a path) on node, rasterised by
 resvg. No browser. A sender runs it locally (the reference tooling looks
 for `$MXBLOCKS_MATH`, then `mxblocks-math` on `PATH`) and uploads the PNG.

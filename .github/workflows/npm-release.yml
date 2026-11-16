@@ -1,14 +1,20 @@
+# Changesets: pending .changeset/*.md files on main open or update a
+# "Version Packages" PR. Merging it (no changesets left) publishes every public
+# package version that is not on npm yet, through npm trusted publishing (OIDC).
 name: npm release
 
 on:
   push:
     branches: [main]
     paths:
+      - .changeset/**
       - packages/**
       - pnpm-lock.yaml
       - pnpm-workspace.yaml
       - package.json
       - scripts/package-artifacts
+      - scripts/publish-packages
+      - scripts/test-artifacts
       - .github/workflows/npm-release.yml
   workflow_dispatch:
 
@@ -20,15 +26,20 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  publish:
+  release:
     if: ${{ !github.event.repository.private && vars.NPM_RELEASE == 'true' }}
     runs-on: ubuntu-latest
     environment: npm
     permissions:
       contents: write
+      pull-requests: write
       id-token: write
+      # Dispatches CI on the version PR (PRs opened by GITHUB_TOKEN start no workflows).
+      actions: write
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
@@ -42,42 +53,36 @@ jobs:
       - run: nix develop --command pnpm check
       - run: pnpm artifacts
       - run: nix develop --command python3 scripts/test-artifacts
-      - name: Publish new versions
-        shell: bash
-        env:
-          # Normally empty: npm uses OIDC trusted publishing. Only for the one-time
-          # bootstrap of a package that does not exist yet (see RELEASING.md).
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_BOOTSTRAP_TOKEN }}
-        run: |
-          for package in element math; do
-            manifest="packages/mxblocks-$package/package.json"
-            name=$(node -p 'JSON.parse(require("fs").readFileSync(process.argv[1])).name' "$manifest")
-            version=$(node -p 'JSON.parse(require("fs").readFileSync(process.argv[1])).version' "$manifest")
-            # Only a genuine 404 means unpublished. Network/auth errors must fail.
-            status=$(curl --silent --show-error --output "$RUNNER_TEMP/registry.json" --write-out '%{http_code}' "https://registry.npmjs.org/$name/$version")
-            if [ "$status" = 200 ]; then
-              echo "$name@$version already published"
-            elif [ "$status" = 404 ]; then
-              npm publish "./artifacts/talaagent-mxblocks-$package-$version.tgz" --access public --provenance
-            else
-              echo "::error::Registry lookup failed for $name@$version: HTTP $status"
-              exit 1
-            fi
-          done
+      - name: Version PR or publish
+        id: changesets
+        uses: changesets/action@v2
+        with:
+          # Publishes the archives tested above with `npm publish --provenance`,
+          # then tags them; the action pushes the tags and creates releases.
+          publish-script: python3 scripts/publish-packages
       - uses: actions/upload-artifact@v7
         with:
           name: mxblocks-npm-${{ github.sha }}
           path: artifacts/*
           if-no-files-found: error
-      - name: Attach deployment assets to the npm release
+      - name: Attach deployment assets to the release
+        if: steps.changesets.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
+          PUBLISHED: ${{ steps.changesets.outputs.published-packages }}
         run: |
-          element=$(node -p 'JSON.parse(require("fs").readFileSync("packages/mxblocks-element/package.json")).version')
-          math=$(node -p 'JSON.parse(require("fs").readFileSync("packages/mxblocks-math/package.json")).version')
-          tag="npm-element-$element-math-$math"
-          if ! gh release view "$tag" >/dev/null 2>&1; then
-            gh release create "$tag" --target "$GITHUB_SHA" --title "npm packages: Element $element, math $math" --notes "Public npm packages and deployment assets. See docs/integration.md for installation."
-          fi
-          gh release upload "$tag" artifacts/* --clobber
+          for tag in $(jq -r '.[] | select(.name == "@talaagent/mxblocks-element") | "\(.name)@\(.version)"' <<<"$PUBLISHED"); do
+            # The action only creates a release when the package CHANGELOG has an entry.
+            if ! gh release view "$tag" >/dev/null 2>&1; then
+              gh release create "$tag" --verify-tag --title "$tag" --notes "npm package and Element deployment assets. See docs/integration.md for installation."
+            fi
+            gh release upload "$tag" artifacts/* --clobber
+          done
+      - name: Start CI for the version PR
+        if: steps.changesets.outputs.pr-number != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          BRANCH: changeset-release/${{ github.ref_name }}
+        run: gh workflow run ci.yml --ref "$BRANCH"

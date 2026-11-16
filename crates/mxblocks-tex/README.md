@@ -8,16 +8,17 @@ the raw TeX as the plain body.
 ## Runtime requirement
 
 The crate builds with no extra tools, but rendering runs an external renderer at
-runtime. The default is `mxblocks-math` on `PATH`, published to npm as
-[`@talaagent/mxblocks-math`](https://www.npmjs.com/package/@talaagent/mxblocks-math):
+runtime. The default is `mxblocks-math` on `PATH`. It is not published to npm;
+get it from the [mxblocks repository](https://github.com/talaagent/mxblocks/tree/main/packages/mxblocks-math):
 
 ```sh
-npm install --global @talaagent/mxblocks-math   # needs Node 24.21+
-# plus `resvg` and fonts; see the package README for MXBLOCKS_MATH_RESVG / MXBLOCKS_MATH_FONT_DIR
+nix build github:talaagent/mxblocks#mxblocks-math   # result/bin/mxblocks-math
 ```
 
-With Nix, `nix build github:talaagent/mxblocks#mxblocks-math` gives a wrapper with
-resvg and fonts pinned. `Renderer::new` takes any path, so a different program
+The Nix package is a wrapper with Node, resvg and fonts pinned. Without Nix, run
+`packages/mxblocks-math/src/mxblocks-math.mjs` from a checkout (Node 24.21+, after
+`pnpm install`) with `resvg` and fonts installed; see the package README for
+`MXBLOCKS_MATH_RESVG` / `MXBLOCKS_MATH_FONT_DIR`. `Renderer::new` takes any path, so a different program
 that keeps the contract below works too. Without a renderer, `render` returns an
 error and the rest of the crate (`math_content`, `maths_html`, `with_caption`)
 still works.

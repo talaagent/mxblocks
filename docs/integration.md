@@ -1,8 +1,8 @@
 # Consuming mxblocks
 
 Use the same release of the Rust types, Element module, and math CLI when adopting
-wire-format changes. The Rust crates and npm packages have independent versions;
-`artifacts/manifest.json` records the npm versions, entrypoints, and SHA-256 hashes.
+wire-format changes. The Rust crates and the npm package have independent versions;
+`artifacts/manifest.json` records the package versions, entrypoints, and SHA-256 hashes.
 
 ## Rust
 
@@ -52,17 +52,23 @@ the asset to build systems that resolve package subpaths.
 
 ## Math CLI
 
+The CLI is not published to npm. Get it from Nix (see below), or from a checkout:
+
 ```sh
-pnpm add @talaagent/mxblocks-math
-pnpm exec mxblocks-math render --out formula.png 'x^2 + y^2 = z^2'
+nix build github:talaagent/mxblocks#mxblocks-math
+result/bin/mxblocks-math render --out formula.png 'x^2 + y^2 = z^2'
 ```
 
-The npm CLI requires Node 24.21+, `resvg`, and fonts. Configure
+Without Nix, `pnpm install --frozen-lockfile` in a checkout and run
+`packages/mxblocks-math/src/mxblocks-math.mjs`, or install the
+`talaagent-mxblocks-math-VERSION.tgz` archive from a CI artifact or GitHub release
+with `npm install --global ./talaagent-mxblocks-math-VERSION.tgz`.
+That CLI requires Node 24.21+, `resvg`, and fonts. Configure
 `MXBLOCKS_MATH_RESVG` and `MXBLOCKS_MATH_FONT_DIR` explicitly in a service. It reads
 TeX from stdin when the last argument is `-` and returns one JSON line containing
 `mimetype`, `w`, `h`, and `size`. `mxblocks_tex::Renderer` consumes this contract.
-An application can install the CLI locally and pass its `.bin/mxblocks-math` path
-to `Renderer::new`, without any global npm installation.
+An application can pass the CLI's path (for example the Nix wrapper's
+`bin/mxblocks-math`) to `Renderer::new`; it need not be on `PATH`.
 
 ## Nix deployments
 
@@ -99,7 +105,9 @@ nix develop --command pnpm check
 pnpm artifacts
 ```
 
-The final command builds both packages and writes two scoped npm archives, the
+The final command builds both packages and writes their two npm archives (only
+the Element one is published), the
 Element deployment archive, `manifest.json`, and `SHA256SUMS` under `artifacts/`.
 CI uploads these files for every tested commit. The npm release workflow attaches
-the same files to its GitHub release after publishing both versions.
+the same files to the `@talaagent/mxblocks-element@VERSION` GitHub release after
+publishing.

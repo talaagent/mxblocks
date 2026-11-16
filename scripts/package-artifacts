@@ -24,6 +24,8 @@ for short in ("element", "math"):
         required.add("package/dist/mxblocks-rich.js" if short == "element" else "package/src/mxblocks-math.mjs")
         if not required <= names:
             raise SystemExit(f"{archive.name}: missing files: {sorted(required - names)}")
+        if short == "element" and not any(n.startswith("package/dist/fonts/") and n.endswith(".woff2") for n in names):
+            raise SystemExit(f"{archive.name}: missing KaTeX fonts under dist/fonts/")
     artifacts.append(archive)
     if short == "element":
         archive = out / f"mxblocks-element-assets-{version}.tar.gz"

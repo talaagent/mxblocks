@@ -65,7 +65,7 @@
             # 4, not 5: consumers that make nixpkgs follow theirs may pin a
             # nixpkgs without 5 (e.g. 26.11.20261015); 4 hashes the same on both.
             fetcherVersion = 4;
-            hash = "sha256-CdZItLTnSIaPnAefnRK0QsQ1oUQ/aJJETY45RfcSis8=";
+            hash = "sha256-B4ovTppZPyqR5RafBPyJR+wypwvBASLE5ilLs8Fg11g=";
           };
         in
         {

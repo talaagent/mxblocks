@@ -3,9 +3,11 @@
 | Package | Registry | Workflow | Auth |
 |---|---|---|---|
 | `mxblocks`, `mxblocks-asks`, `mxblocks-tex`, `mxblocks-tools` | crates.io | `release-plz.yml` (environment `release`) | crates.io trusted publishing (OIDC) |
-| `@talaagent/mxblocks-element`, `@talaagent/mxblocks-math` | npm | `npm-release.yml` (environment `npm`) | npm trusted publishing (OIDC), with provenance |
+| `@talaagent/mxblocks-element` | npm | `npm-release.yml` (environment `npm`), driven by [changesets](https://github.com/changesets/changesets) | npm trusted publishing (OIDC), with provenance |
 
-No long-lived registry token is stored in GitHub.
+No long-lived registry token is stored in GitHub. `@talaagent/mxblocks-math`
+is private: it is not published to npm (consumers use the Nix package or the
+repository), and changesets ignores it.
 
 ## Rust crates (release-plz)
 
@@ -23,18 +25,40 @@ Manual or partial release: run the `release` workflow from the Actions tab with
 `bootstrap: true` and an optional `release_packages` list. It publishes the
 committed versions without needing a release PR.
 
-## npm packages
+## npm package (changesets)
 
-1. `pnpm version:packages X.Y.Z`. Both packages share one version. Add the
-   changes to `CHANGELOG.md`.
-2. Run `pnpm check && pnpm artifacts` and inspect `artifacts/` (`tar tzf ...`).
-3. Open a PR and merge it. On `main`, `npm-release.yml` builds and tests the
-   packages, packs them, and publishes each `name@version` that is not on the
-   registry yet, with `--provenance`. It then attaches the tarballs and the Element
-   deployment archive to a GitHub release named `npm-element-X-math-Y`.
+1. Every PR that changes what `@talaagent/mxblocks-element` ships adds a
+   changeset: run `pnpm changeset`, pick the package and the bump
+   (patch/minor/major), and write a line for the changelog. This commits a
+   `.changeset/*.md` file with the PR. Changes that don't affect the package
+   need no changeset.
+2. On `main`, `npm-release.yml` runs
+   [changesets/action](https://github.com/changesets/action). While changesets
+   are pending it opens or updates a **Version Packages** PR on the
+   `changeset-release/main` branch: `changeset version` bumps
+   `packages/mxblocks-element/package.json`, writes its `CHANGELOG.md` (with PR
+   and author links from `@changesets/changelog-github`, using the workflow's
+   `GITHUB_TOKEN`) and deletes the consumed changesets. The workflow then starts
+   CI on that branch, because PRs opened by the built-in token don't trigger
+   workflows on their own.
+3. Merge the Version Packages PR. With no changesets left, the action runs
+   `scripts/publish-packages`: for each public package whose version is not on
+   npm yet (a genuine registry 404), it runs
+   `npm publish ./artifacts/<archive>.tgz --access public --provenance` on the
+   archive that `pnpm artifacts` built and `scripts/test-artifacts` tested in the
+   same job. Then `changeset git-tag` tags `@talaagent/mxblocks-element@X.Y.Z`,
+   and the action pushes the tag and creates the GitHub release from the
+   changelog entry. The workflow attaches the npm archives, the Element
+   deployment archive, `manifest.json` and `SHA256SUMS` to that release.
+
+A version that is already on npm is never published again, so a version
+published by hand (such as the first 0.1.0) is only tagged and released. Re-running
+the workflow is safe. Check locally with `pnpm changeset status`,
+`pnpm artifacts` and `python3 scripts/publish-packages --dry-run`.
 
 Publishing only runs when the repository variable `NPM_RELEASE` is `true`.
-Until then the workflow is skipped.
+Until then the workflow is skipped. Settings → Actions → General must allow
+GitHub Actions to create pull requests (already needed for release-plz).
 
 ## One-time setup: current state (2026-11)
 
@@ -46,35 +70,33 @@ Until then the workflow is skipped.
 - GitHub: environments `release` and `npm` exist, and `RELEASE_PR=true` is set.
   Optional: restrict both environments to the `main` branch.
 - npm: **not done**. Nothing is published, and the `@talaagent` scope is not
-  claimed yet (no npm user or org called `talaagent`).
+  claimed yet (no npm user or org called `talaagent`). Only
+  `@talaagent/mxblocks-element` will be published; `@talaagent/mxblocks-math` stays
+  off npm.
 
 ## One-time setup: owner steps for npm
 
 npm can only attach a trusted publisher to a package that already exists, so the
-first version has to be published with a token.
+first version is published by hand with a token. The workflow has no token
+fallback (the old `NPM_BOOTSTRAP_TOKEN` path is gone); the repository needs no
+npm secret at all.
 
 1. On npmjs.com (Ian's account, 2FA on), create the free organization
    **`talaagent`**. This claims the `@talaagent` scope.
-2. Publish 0.1.0 of both packages. Pick one:
-   - **CI bootstrap (recommended: the first version also gets provenance).**
-     Create a granular access token: read/write for packages and scopes,
-     limited to the `@talaagent` scope, 1-day expiry, "bypass 2FA" on. Add it as
-     an **environment secret** `NPM_BOOTSTRAP_TOKEN` on the `npm` environment, set
-     the repository variable `NPM_RELEASE=true`, then run "npm release" from the
-     Actions tab (workflow_dispatch on `main`).
-   - **Local.** `pnpm install --frozen-lockfile && nix develop --command pnpm check && pnpm artifacts`,
-     then `npm login` and
-     `npm publish ./artifacts/talaagent-mxblocks-element-0.1.0.tgz --access public`
-     and the same for `talaagent-mxblocks-math-0.1.0.tgz`. Keep the `./`:
-     without it, npm reads the path as a GitHub shorthand. This first version
-     has no provenance.
-3. For each package, go to npmjs.com → package → Settings → Trusted publisher →
+2. Publish 0.1.0 locally, from an up-to-date `main`:
+   `pnpm install --frozen-lockfile && nix develop --command pnpm check && pnpm artifacts`,
+   then `npm login` and
+   `npm publish ./artifacts/talaagent-mxblocks-element-0.1.0.tgz --access public`.
+   Keep the `./`: without it, npm reads the path as a GitHub shorthand. This
+   first version has no provenance. Don't add a changeset for it: the committed
+   version is already 0.1.0, and a changeset would bump it to 0.1.1.
+3. On npmjs.com → `@talaagent/mxblocks-element` → Settings → Trusted publisher →
    GitHub Actions: organization `talaagent`, repository `mxblocks`, workflow
    `npm-release.yml`, environment `npm`.
-4. If you used the CI bootstrap, delete the `NPM_BOOTSTRAP_TOKEN` secret and
-   revoke the token on npmjs.com.
-5. Make sure the repository variable `NPM_RELEASE=true` is set.
-6. Optional hardening: on each package's settings page, set publishing access to
+4. Set the repository variable `NPM_RELEASE=true`. The next run of "npm release"
+   (on a push to `main`, or from the Actions tab) finds 0.1.0 on npm, skips the
+   publish, and tags and releases it with the deployment assets.
+5. Optional hardening: on the package's settings page, set publishing access to
    "Require two-factor authentication and disallow tokens". Trusted publishing
    still works with that setting.
 

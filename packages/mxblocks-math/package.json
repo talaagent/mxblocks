@@ -1,6 +1,7 @@
 {
   "name": "@talaagent/mxblocks-math",
   "version": "0.1.0",
+  "private": true,
   "description": "Server-side LaTeX to PNG for mxblocks math messages (MathJax SVG + resvg)",
   "keywords": [
     "matrix",
@@ -36,10 +37,6 @@
     "NOTICE",
     "README.md"
   ],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
   "homepage": "https://github.com/talaagent/mxblocks/tree/main/packages/mxblocks-math#readme",
   "bugs": {
     "url": "https://github.com/talaagent/mxblocks/issues"
