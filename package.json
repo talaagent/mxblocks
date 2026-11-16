@@ -12,9 +12,11 @@
     "check": "pnpm typecheck && pnpm test && pnpm build",
     "check:rust": "cargo fmt --all --check && cargo clippy --workspace --all-targets --locked -- -D warnings && cargo nextest run --workspace --locked && cargo test --doc --workspace --locked",
     "artifacts": "pnpm build && python3 scripts/package-artifacts",
-    "version:packages": "python3 scripts/version-packages"
+    "changeset": "changeset"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "1.0.1",
+    "@changesets/cli": "3.0.3",
     "turbo": "2.11.10"
   }
 }

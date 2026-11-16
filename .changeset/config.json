@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "talaagent/mxblocks" }],
+  "commit": false,
+  "fixed": [],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": ["@talaagent/mxblocks-math"],
+  "privatePackages": { "version": false, "tag": false }
+}

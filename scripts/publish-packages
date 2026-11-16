@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Publish the verified npm archives that are not on the registry yet, then tag them.
+
+Run by changesets/action (publish-script) after `pnpm artifacts` and
+scripts/test-artifacts, so the tarballs published are the ones that were tested.
+Private packages are skipped. `changeset git-tag` then tags every public package
+version without a tag (including one first published by hand) and reports the
+tags through $CHANGESETS_OUTPUT, so the action pushes them and creates releases.
+
+--dry-run runs `npm publish --dry-run` and creates no tags.
+"""
+import json
+from pathlib import Path
+import subprocess
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+
+dry_run = sys.argv[1:] == ["--dry-run"]
+if sys.argv[1:] and not dry_run:
+    sys.exit("usage: scripts/publish-packages [--dry-run]")
+root = Path(__file__).resolve().parent.parent
+for path in sorted((root / "packages").glob("*/package.json")):
+    manifest = json.loads(path.read_text())
+    if manifest.get("private"):
+        continue
+    name, version = manifest["name"], manifest["version"]
+    archive = root / "artifacts" / f"{name.removeprefix('@').replace('/', '-')}-{version}.tgz"
+    if not archive.is_file():
+        sys.exit(f"{archive} is missing; run `pnpm artifacts` first")
+    url = f"https://registry.npmjs.org/{urllib.parse.quote(name, safe='@')}/{version}"
+    try:
+        with urllib.request.urlopen(url, timeout=30):
+            print(f"{name}@{version} is already published")
+            continue
+    except urllib.error.HTTPError as error:
+        # Only a genuine 404 means unpublished. Network/auth errors must fail.
+        if error.code != 404:
+            sys.exit(f"Registry lookup failed for {name}@{version}: HTTP {error.code}")
+    command = ["npm", "publish", f"./{archive.relative_to(root)}", "--access", "public", "--provenance"]
+    if dry_run:
+        command.append("--dry-run")
+    print("+", " ".join(command), flush=True)
+    subprocess.run(command, cwd=root, check=True)
+if not dry_run:
+    subprocess.run(["pnpm", "exec", "changeset", "git-tag"], cwd=root, check=True)
