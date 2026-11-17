@@ -12,8 +12,8 @@ keywords = ["matrix", "latex", "math", "chatbot"]
 categories = ["api-bindings"]
 
 [dependencies]
-mxblocks.workspace = true
-serde_json.workspace = true
+mxblocks = { workspace = true, features = ["std"] }
+serde_json = { workspace = true, features = ["std"] }
 tokio = { workspace = true, features = ["fs", "io-util", "process", "time"] }
 
 [dev-dependencies]

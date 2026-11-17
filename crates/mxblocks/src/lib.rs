@@ -39,6 +39,17 @@
 //! and the exact read aliases. Applications can choose their own namespace.
 
 #![warn(missing_docs)]
+#![cfg_attr(not(test), no_std)]
+
+extern crate alloc;
+
+use alloc::{
+    borrow::ToOwned,
+    format,
+    string::{String, ToString},
+    vec,
+    vec::Vec,
+};
 
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::{Map, Value};
@@ -1094,14 +1105,14 @@ pub fn has_float(v: &Value) -> bool {
 /// ([`canonical_numbers`]). Borrowed when it has no float; also borrowed,
 /// unchanged, when it can't be fixed (an integer beyond ±[`MAX_SAFE_INT`]),
 /// so the homeserver's own error reaches the caller.
-pub fn canonical_content(content: &Value) -> std::borrow::Cow<'_, Value> {
+pub fn canonical_content(content: &Value) -> alloc::borrow::Cow<'_, Value> {
     if !has_float(content) {
-        return std::borrow::Cow::Borrowed(content);
+        return alloc::borrow::Cow::Borrowed(content);
     }
     let mut c = content.clone();
     match canonical_numbers(&mut c) {
-        Ok(()) => std::borrow::Cow::Owned(c),
-        Err(_) => std::borrow::Cow::Borrowed(content),
+        Ok(()) => alloc::borrow::Cow::Owned(c),
+        Err(_) => alloc::borrow::Cow::Borrowed(content),
     }
 }
 
@@ -1247,7 +1258,7 @@ mod tests {
 
     #[test]
     fn sent_content_is_canonical_json() {
-        use std::borrow::Cow;
+        use alloc::borrow::Cow;
         let plain = json!({"body": "x", "n": 1});
         assert!(matches!(canonical_content(&plain), Cow::Borrowed(_)));
         let edit = json!({"body": "* x", "com.ianm.mtrix": {"v": 1, "blocks": [

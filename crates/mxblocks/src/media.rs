@@ -3,6 +3,8 @@
 //! (`EncryptedFile`: url, key, iv, hashes, v) in E2EE rooms. Shapes and
 //! limits: `docs/spec.md`.
 
+use alloc::{format, string::String, vec::Vec};
+
 use serde_json::{Map, Value};
 
 /// Images in a `gallery` (validation refuses fewer or more; renderers draw 1 and
@@ -163,12 +165,12 @@ pub fn text_preview(data: &[u8]) -> Option<String> {
     if head.contains(&0) {
         return None;
     }
-    let text = match std::str::from_utf8(head) {
+    let text = match core::str::from_utf8(head) {
         Ok(s) => s,
         // A multi-byte character cut by the byte cap is fine; anything else
         // is binary.
         Err(e) if head.len() == MAX_PREVIEW_BYTES && head.len() - e.valid_up_to() < 4 => {
-            std::str::from_utf8(&head[..e.valid_up_to()]).ok()?
+            core::str::from_utf8(&head[..e.valid_up_to()]).ok()?
         }
         Err(_) => return None,
     };

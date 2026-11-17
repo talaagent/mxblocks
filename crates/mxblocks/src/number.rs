@@ -4,6 +4,8 @@
 //! integer or a decimal string (`"62.99"`); senders turn floats into decimal
 //! strings before validating ([`canonicalize`]).
 
+use alloc::{borrow::ToOwned, format, string::String};
+
 use serde_json::{Map, Value};
 
 /// The largest integer canonical JSON allows (2^53 - 1); the smallest is its
@@ -75,7 +77,8 @@ pub fn canonicalize(v: &mut Value, path: &str) -> Result<(), String> {
             if !f.is_finite() {
                 return Err(format!("{path}: {f} isn't a finite number"));
             }
-            *v = if f.fract() == 0.0 && f.abs() <= MAX_SAFE_INT as f64 {
+            // `f.fract() == 0.0`, which `core` lacks; the cast is exact here.
+            *v = if f.abs() <= MAX_SAFE_INT as f64 && f as i64 as f64 == f {
                 // Exact: |f| < 2^53 with no fraction.
                 Value::from(f as i64)
             } else {

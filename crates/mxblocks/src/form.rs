@@ -4,6 +4,8 @@
 //! [`FORM_REPLY_FORMAT`] and whose `com.ianm.mtrix.used` carries the raw
 //! values. Shapes and limits: `docs/spec.md`.
 
+use alloc::{borrow::ToOwned, format, string::String, vec, vec::Vec};
+
 use serde_json::{Map, Value};
 
 use super::{MAX_LABEL, media::opt_text, validate_id};
@@ -28,7 +30,7 @@ fn is_date(s: &str) -> bool {
     if b.len() != 10 || b[4] != b'-' || b[7] != b'-' {
         return false;
     }
-    let n = |r: std::ops::Range<usize>| s.get(r).and_then(|x| x.parse::<u32>().ok());
+    let n = |r: core::ops::Range<usize>| s.get(r).and_then(|x| x.parse::<u32>().ok());
     let (Some(y), Some(m), Some(d)) = (n(0..4), n(5..7), n(8..10)) else {
         return false;
     };
