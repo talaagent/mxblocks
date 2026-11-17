@@ -9,6 +9,17 @@
 
 #![doc = include_str!("../README.md")]
 #![warn(missing_docs)]
+#![cfg_attr(not(test), no_std)]
+
+extern crate alloc;
+
+use alloc::{
+    borrow::ToOwned,
+    format,
+    string::{String, ToString},
+    vec,
+    vec::Vec,
+};
 
 use serde_json::{Map, Value, json};
 

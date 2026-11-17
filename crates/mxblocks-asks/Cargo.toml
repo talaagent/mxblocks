@@ -11,8 +11,14 @@ documentation = "https://docs.rs/mxblocks-asks"
 keywords = ["matrix", "reactions", "chatbot"]
 categories = ["text-processing"]
 
+[features]
+default = ["std"]
+# The crate is no_std + alloc; `std` only turns on its dependencies' std features.
+std = ["mxblocks/std", "regex/std"]
+
 [dependencies]
 mxblocks.workspace = true
+once_cell.workspace = true
 regex.workspace = true
 
 [dev-dependencies]

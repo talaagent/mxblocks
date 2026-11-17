@@ -45,6 +45,9 @@ Rust APIs: [mxblocks](https://docs.rs/mxblocks),
 [mxblocks-asks](https://docs.rs/mxblocks-asks),
 [mxblocks-tex](https://docs.rs/mxblocks-tex), and
 [mxblocks-tools](https://docs.rs/mxblocks-tools).
+`mxblocks`, `mxblocks-asks` and `mxblocks-tools` are `#![no_std]` and need only
+`alloc`: build them with `default-features = false` (the default `std` feature
+only turns on their dependencies' std features).
 See the [integration guide](docs/integration.md) for deployment archives, npm,
 and Nix consumption, including the Cargo source paths after the workspace move.
 

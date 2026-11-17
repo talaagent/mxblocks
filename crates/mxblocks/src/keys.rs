@@ -1,5 +1,7 @@
 //! Caller-controlled message namespaces and the default compatibility keys.
 
+use alloc::{borrow::ToOwned, format, string::String, vec, vec::Vec};
+
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 

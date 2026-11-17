@@ -104,6 +104,7 @@ name = "mxblocks-asks"
 version = "0.1.1"
 dependencies = [
  "mxblocks",
+ "once_cell",
  "regex",
  "serde_json",
 ]

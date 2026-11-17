@@ -12,6 +12,11 @@ keywords = ["matrix", "chatbot", "rich-messages"]
 categories = ["encoding", "api-bindings"]
 include = ["/src", "/tests", "/LICENSE", "/NOTICE", "/README.md", "/CHANGELOG.md"]
 
+[features]
+default = ["std"]
+# The crate is no_std + alloc; `std` only turns on its dependencies' std features.
+std = ["serde/std", "serde_json/std"]
+
 [dependencies]
 serde.workspace = true
 serde_json.workspace = true

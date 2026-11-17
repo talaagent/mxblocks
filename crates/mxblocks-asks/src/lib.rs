@@ -24,45 +24,73 @@
 
 #![doc = include_str!("../README.md")]
 #![warn(missing_docs)]
+#![cfg_attr(not(test), no_std)]
 
-use std::sync::LazyLock;
+extern crate alloc;
+
+use alloc::{borrow::ToOwned, boxed::Box, format, string::String, vec::Vec};
+
+use core::ops::Deref;
 
 use mxblocks::{Button, MAX_LABEL, Rich, Style, norm_key};
+use once_cell::race::OnceBox;
 use regex::Regex;
 
 /// One emoji (with its variation selector, skin tone, ZWJ sequence), or a
 /// keycap.
 const EMO: &str = r"(?:\p{Extended_Pictographic}|[#*0-9]\x{FE0F}?\x{20E3})(?:\x{FE0F}|\p{Emoji_Modifier})*(?:\x{200D}\p{Extended_Pictographic}(?:\x{FE0F}|\p{Emoji_Modifier})*)*";
 
+/// A regex built on first use (`std::sync::LazyLock` without std).
+struct Lazy {
+    cell: OnceBox<Regex>,
+    init: fn() -> Regex,
+}
+
+impl Lazy {
+    const fn new(init: fn() -> Regex) -> Self {
+        Self {
+            cell: OnceBox::new(),
+            init,
+        }
+    }
+}
+
+impl Deref for Lazy {
+    type Target = Regex;
+
+    fn deref(&self) -> &Regex {
+        self.cell.get_or_init(|| Box::new((self.init)()))
+    }
+}
+
 fn re(p: &str) -> Regex {
     Regex::new(&p.replace("EMO", EMO)).unwrap_or_else(|e| panic!("reaction_asks regex: {e}"))
 }
 
-static EMO_RE: LazyLock<Regex> = LazyLock::new(|| re("EMO"));
+static EMO_RE: Lazy = Lazy::new(|| re("EMO"));
 /// A code fence: up to 3 spaces, then 3+ backticks or tildes.
-static FENCE_RE: LazyLock<Regex> = LazyLock::new(|| re(r"^\s{0,3}(`{3,}|~{3,})(.*)$"));
-static MARKER_RE: LazyLock<Regex> = LazyLock::new(|| re(r"\[ask:\s*([^\]\n]+)\]"));
-static OPTION_RE: LazyLock<Regex> = LazyLock::new(|| re(r"^(EMO)\s*(.*)$"));
+static FENCE_RE: Lazy = Lazy::new(|| re(r"^\s{0,3}(`{3,}|~{3,})(.*)$"));
+static MARKER_RE: Lazy = Lazy::new(|| re(r"\[ask:\s*([^\]\n]+)\]"));
+static OPTION_RE: Lazy = Lazy::new(|| re(r"^(EMO)\s*(.*)$"));
 /// `✅ to deploy, ❌ to skip` (or `/`, `;`, `·`, `|`, `or`), two or three,
 /// at the end of the line.
-static TO_RE: LazyLock<Regex> = LazyLock::new(|| {
+static TO_RE: Lazy = Lazy::new(|| {
     let item = r"EMO\s+to\s+[^,;·|/\n\p{Extended_Pictographic}]{1,60}?";
     let sep = r"(?:\s*[,;·|/]\s*(?:or\s+)?|\s+or\s+)";
     re(&format!(r"{item}{sep}{item}(?:{sep}{item})?[\s.!?)]*$"))
 });
 /// `✅ merge #5366 · ⏸ hold`: the marker's rendered form, a whole line
 /// ([`rendered_only`]).
-static RENDERED_RE: LazyLock<Regex> = LazyLock::new(|| {
+static RENDERED_RE: Lazy = Lazy::new(|| {
     let item = r"EMO\s*[^·|\n\p{Extended_Pictographic}]{1,80}?";
     re(&format!(r"^\s*{item}(?:\s+·\s+{item}){{1,3}}\s*$"))
 });
 /// `react ✅`, `react with 👍 or 👎`.
-static REACT_RE: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?i)\breact(?:\s+with)?\s+(EMO(?:\s*(?:/|,|or)\s*EMO){0,3})[\s.!?)]*$"));
+static REACT_RE: Lazy =
+    Lazy::new(|| re(r"(?i)\breact(?:\s+with)?\s+(EMO(?:\s*(?:/|,|or)\s*EMO){0,3})[\s.!?)]*$"));
 /// `👍/👎?`, `👍 or 👎`.
-static PAIR_RE: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?:^|[\s(:—–-])(EMO\s*(?:/|or)\s*EMO(?:\s*(?:/|or)\s*EMO)?)\s*\??[\s.!)]*$")
-});
+static PAIR_RE: Lazy =
+    Lazy::new(|| re(r"(?:^|[\s(:—–-])(EMO\s*(?:/|or)\s*EMO(?:\s*(?:/|or)\s*EMO)?)\s*\??[\s.!)]*$"));
 
 /// One option: the reaction key and its label (empty: the key alone).
 #[derive(Debug, Clone, PartialEq, Eq)]

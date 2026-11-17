@@ -13,4 +13,6 @@ assert_eq!(specs.len(), 2);
 assert!(mxblocks_tools::is_rich_tool("rich_send"));
 ```
 
+`#![no_std]`, needs only `alloc`: use `default-features = false`.
+
 Apache-2.0.

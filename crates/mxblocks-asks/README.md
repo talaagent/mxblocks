@@ -15,4 +15,6 @@ let (_, ask) = mxblocks_asks::take_marker("Deploy? [ask: ✅ deploy | ❌ skip]"
 assert_eq!(ask.opts.len(), 2);
 ```
 
+`#![no_std]`, needs only `alloc`: use `default-features = false`.
+
 Apache-2.0.

@@ -11,6 +11,11 @@ documentation = "https://docs.rs/mxblocks-tools"
 keywords = ["matrix", "llm", "tools", "chatbot"]
 categories = ["api-bindings"]
 
+[features]
+default = ["std"]
+# The crate is no_std + alloc; `std` only turns on its dependencies' std features.
+std = ["mxblocks/std", "serde_json/std"]
+
 [dependencies]
 mxblocks.workspace = true
 serde_json.workspace = true
