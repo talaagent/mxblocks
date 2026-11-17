@@ -46,6 +46,21 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo build -p mxblocks -p mxblocks-asks -p mxblocks-tools --no-default-features --target thumbv7em-none-eabihf --locked
 
+  no-std-host-tests:
+    name: no_std host tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+      # Test builds still link std (`cfg_attr(not(test), no_std)`), but the
+      # crates' dependencies are built without std, so the alloc-only code
+      # paths and `std` cfg gates are exercised. mxblocks-tex is std-only.
+      - run: cargo clippy --workspace --exclude mxblocks-tex --all-targets --no-default-features --locked -- -D warnings
+      - run: cargo test --workspace --exclude mxblocks-tex --no-default-features --locked
+
   packages:
     name: pnpm and Turbo packages
     runs-on: ubuntu-latest

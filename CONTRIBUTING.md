@@ -10,6 +10,7 @@ Keep Rust crates under `crates/` and JavaScript packages under `packages/`.
 pnpm install --frozen-lockfile
 pnpm check
 pnpm check:rust
+cargo test --workspace --exclude mxblocks-tex --no-default-features --locked
 RUSTDOCFLAGS="-D warnings" cargo doc --workspace --no-deps --locked
 cargo publish --workspace --dry-run --locked
 scripts/privacy-check
