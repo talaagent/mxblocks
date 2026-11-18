@@ -1,0 +1,5 @@
+[toolchain]
+channel = "1.100.0"
+components = ["rustfmt", "clippy", "rust-src", "rust-analyzer"]
+# For the no_std build (CI's no_std job), also from `nix develop`.
+targets = ["thumbv7em-none-eabihf"]
