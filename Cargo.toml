@@ -3,7 +3,7 @@ resolver = "3"
 members = ["crates/*"]
 
 [workspace.package]
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 rust-version = "1.88"
 license = "Apache-2.0"
@@ -12,7 +12,7 @@ repository = "https://github.com/talaagent/mxblocks"
 [workspace.dependencies]
 # The core crates are no_std + alloc: dependencies default to no std, and
 # each crate's default `std` feature turns it back on.
-mxblocks = { path = "crates/mxblocks", version = "0.1.1", default-features = false }
+mxblocks = { path = "crates/mxblocks", version = "0.1.2", default-features = false }
 once_cell = { version = "1.21", default-features = false, features = ["race", "alloc"] }
 serde = { version = "1", default-features = false, features = ["derive", "alloc"] }
 serde_json = { version = "1", default-features = false, features = ["alloc"] }

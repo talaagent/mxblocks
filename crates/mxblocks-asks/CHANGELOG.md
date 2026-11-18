@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.1.2](https://github.com/talaagent/mxblocks/compare/mxblocks-asks-v0.1.1...mxblocks-asks-v0.1.2) - 2026-11-18
+
+### Added
+
+- no_std + alloc for mxblocks, mxblocks-asks and mxblocks-tools ([#11](https://github.com/talaagent/mxblocks/pull/11))
+
 ## [0.1.1](https://github.com/talaagent/mxblocks/compare/mxblocks-asks-v0.1.0...mxblocks-asks-v0.1.1) - 2026-11-07
 
 ### Other
