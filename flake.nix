@@ -11,6 +11,10 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -30,9 +34,16 @@
           self',
           pkgs,
           lib,
+          system,
           ...
         }:
         let
+          # The toolchain pinned in rust-toolchain.toml, from rust-overlay.
+          rustToolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+          rustPlatform = pkgs.makeRustPlatform {
+            cargo = rustToolchain;
+            rustc = rustToolchain;
+          };
           src = lib.fileset.toSource {
             root = ./.;
             fileset = lib.fileset.unions [
@@ -69,8 +80,13 @@
           };
         in
         {
+          _module.args.pkgs = import inputs.nixpkgs {
+            inherit system;
+            overlays = [ (import inputs.rust-overlay) ];
+          };
+
           # The crate (a library: $out is empty). `cargo test` runs in checkPhase.
-          packages.mxblocks = pkgs.rustPlatform.buildRustPackage {
+          packages.mxblocks = rustPlatform.buildRustPackage {
             pname = "mxblocks";
             version = (lib.importTOML ./Cargo.toml).workspace.package.version;
             inherit src;
@@ -104,7 +120,7 @@
           # clippy with warnings denied, from the same vendored deps.
           checks.clippy = self'.packages.mxblocks.overrideAttrs (old: {
             pname = "mxblocks-clippy";
-            nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.clippy ];
+            nativeBuildInputs = old.nativeBuildInputs ++ [ rustToolchain ];
             buildPhase = ''
               runHook preBuild
               cargo clippy --offline --workspace --all-targets -- -D warnings
@@ -116,10 +132,7 @@
           checks.rustfmt =
             pkgs.runCommand "mxblocks-rustfmt"
               {
-                nativeBuildInputs = [
-                  pkgs.cargo
-                  pkgs.rustfmt
-                ];
+                nativeBuildInputs = [ rustToolchain ];
               }
               ''
                 cp -r ${src} src && chmod -R u+w src && cd src
@@ -140,7 +153,10 @@
           treefmt = {
             projectRootFile = "flake.nix";
             programs.nixfmt.enable = true;
-            programs.rustfmt.enable = true;
+            programs.rustfmt = {
+              enable = true;
+              package = rustToolchain;
+            };
             programs.prettier = {
               enable = true;
               includes = [
@@ -159,12 +175,8 @@
             MXBLOCKS_MATH_RESVG = lib.getExe pkgs.resvg;
             MXBLOCKS_MATH_FONT_DIR = "${pkgs.dejavu_fonts}/share/fonts/truetype";
             packages = [
-              pkgs.cargo
-              pkgs.rustc
-              pkgs.clippy
-              pkgs.rustfmt
+              rustToolchain
               pkgs.cargo-nextest
-              pkgs.rust-analyzer
               pkgs.nodejs
               pkgs.pnpm
               pkgs.resvg
