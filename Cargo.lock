@@ -93,7 +93,7 @@ dependencies = [
 
 [[package]]
 name = "mxblocks"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "serde",
  "serde_json",
@@ -101,7 +101,7 @@ dependencies = [
 
 [[package]]
 name = "mxblocks-asks"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "mxblocks",
  "once_cell",
@@ -111,7 +111,7 @@ dependencies = [
 
 [[package]]
 name = "mxblocks-tex"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "mxblocks",
  "serde_json",
@@ -121,7 +121,7 @@ dependencies = [
 
 [[package]]
 name = "mxblocks-tools"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "mxblocks",
  "serde_json",
